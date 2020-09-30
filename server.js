@@ -1,3 +1,4 @@
+const { notStrictEqual } = require("assert");
 const express = require("express");
 const path = require("path");
 
@@ -9,13 +10,26 @@ const PORT = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
+
+
+
+// NOTES 
+var notes = [];
+
 // HTML ROUTES 
 
 // get /notes 
 // should return the notes.html file
+app.get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "notes.html"));
+});
 
 // get * 
 // should return the index.html file
+app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "index.html"))
+});
 
 
 //API ROUTES
@@ -23,6 +37,9 @@ app.use(express.json());
 // get /api/notes
 // should read the db.json file 
 // return all saved notes as JSON 
+app.get("/api/notes", function (req, res) {
+    return res.json(notes);
+});
 
 //post /api/notes 
 // should receive a new note to save on the request body
