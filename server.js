@@ -8,6 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 //middleware 
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -29,7 +30,7 @@ app.get("/", function (req, res) {
 
 // get * 
 // should return the index.html file
-app.get("*", function (req, res) {
+app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "/public/notes.html"))
 });
 
@@ -40,7 +41,7 @@ app.get("*", function (req, res) {
 // should read the db.json file 
 // return all saved notes as JSON 
 app.get("/api/notes", function (req, res) {
-    return res.sendFile(db);
+ res.json(db);
     
 });
 
@@ -55,11 +56,13 @@ app.post("/api/notes", function (req, res)
 
     console.log(newNote);
   
+    //fs.readfile, parse data
+    
     notes.push(newNote);
-  
+  //fs.writefile
     res.json(newNote);
 
-})
+});
 
 // delete /api/notes/:id
 // should receive a query param containing the id of a note to delete 
