@@ -1,6 +1,7 @@
-const { notStrictEqual } = require("assert");
+
 const express = require("express");
 const path = require("path");
+const db = require("./db/db.json")
 
 
 const app = express();
@@ -21,13 +22,13 @@ var notes = [];
 // get /notes 
 // should return the notes.html file
 app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "notes.html"));
+    res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
 // get * 
 // should return the index.html file
 app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "index.html"))
+    res.sendFile(path.join(__dirname, "/public/index.html"))
 });
 
 
@@ -37,7 +38,7 @@ app.get("*", function (req, res) {
 // should read the db.json file 
 // return all saved notes as JSON 
 app.get("/api/notes", function (req, res) {
-    return res.json(notes);
+    return res.json(db);
 });
 
 //post /api/notes 
