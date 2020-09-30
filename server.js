@@ -13,8 +13,10 @@ app.use(express.json());
 
 
 // NOTES 
-var notes = [];
-
+// var notes = [{
+//     title: "hello",
+//     text: "nope"
+// }];
 
 
 // HTML ROUTES 
@@ -22,13 +24,13 @@ var notes = [];
 // get /notes 
 // should return the notes.html file
 app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "/public/notes.html"));
+    res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
 // get * 
 // should return the index.html file
 app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "/public/index.html"))
+    res.sendFile(path.join(__dirname, "/public/notes.html"))
 });
 
 
@@ -38,13 +40,26 @@ app.get("*", function (req, res) {
 // should read the db.json file 
 // return all saved notes as JSON 
 app.get("/api/notes", function (req, res) {
-    return res.json(db);
+    return res.sendFile(db);
+    
 });
 
 //post /api/notes 
 // should receive a new note to save on the request body
 // add it to the db.json file
 // return the new note to the client 
+
+app.post("/api/notes", function (req, res)
+{
+    var newNote = req.body;
+
+    console.log(newNote);
+  
+    notes.push(newNote);
+  
+    res.json(newNote);
+
+})
 
 // delete /api/notes/:id
 // should receive a query param containing the id of a note to delete 
