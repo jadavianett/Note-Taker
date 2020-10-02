@@ -22,9 +22,7 @@ const saveNote = (note) => {
     data: note,
     method: "POST",
   });
-  
 };
-
 
 // A function for deleting a note from the db
 const deleteNote = (id) => {
@@ -62,7 +60,6 @@ const handleNoteSave = function () {
     getAndRenderNotes();
     renderActiveNote();
   });
-
 };
 
 // Delete the clicked note
@@ -80,7 +77,6 @@ const handleNoteDelete = function (event) {
     getAndRenderNotes();
     renderActiveNote();
   });
-  
 };
 
 // Sets the activeNote and displays it
@@ -107,7 +103,6 @@ const handleRenderSaveBtn = function () {
 
 // Render's the list of note titles
 const renderNoteList = (notes) => {
-  console.log(notes);
   $noteList.empty();
 
   const noteListItems = [];
