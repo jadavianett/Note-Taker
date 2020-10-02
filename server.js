@@ -1,8 +1,9 @@
 const express = require("express");
 const path = require("path");
-const db = require("./db/db.json");
+let db = require("./db/db.json");
 const fs = require("fs");
 
+let newId = 1;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,28 +31,28 @@ app.get("/notes", function (req, res) {
 //API ROUTES
 
 // get /api/notes
-// should read the db.json file
-// return all saved notes as JSON
 app.get("/api/notes", function (req, res) {
   res.json(db);
 });
 
 //post /api/notes
-// should receive a new note to save on the request body
-// add it to the db.json file
-// return the new note to the client
 
 app.post("/api/notes", function (req, res) {
   try {
-    notesList = fs.readFileSync("./db/db.json", "utf8");
-    notesList = JSON.parse(notesList);
-    req.body.id =notesList.length;
-    notesList.push(req.body);
-    notesList = JSON.stringify(notesList);
-    fs.writeFile("./db/db.json", notesList, "utf8", function (err) {
-      if (err) throw err;
-    });
-    res.json(JSON.parse(notesList));
+      const newNotes = req.body;
+      for (i = 0; i < db.length; i++) {
+          newId++;
+      }
+      newNotes.id = newId;
+    db.push(req.body);
+    fs.writeFile(
+      path.join(__dirname, "./db/db.json"),
+      JSON.stringify(db),
+      function (err) {
+        if (err) throw err;
+      }
+    );
+    res.json(req.body);
   } catch (err) {
     throw err;
   }
@@ -59,10 +60,15 @@ app.post("/api/notes", function (req, res) {
 
 // delete /api/notes/:id
 
-//same as the post except you need a filter
-// should receive a query param containing the id of a note to delete
-// this means you'll need to find a way to give each note a unique id when its saved
-// read all notes from the db.json file, remove the note with the given 'id' property, and rewrite the notes to the db.json file
+app.delete("/api/notes/:id", function (req, res) {
+    try {
+      db = db.filter((note) => note.id != req.params.id);
+      res.json({message: "your note was deleted"});
+    } catch (err) {
+      throw err;
+    }
+  });
+
 
 //starts the server listening
 app.listen(PORT, function () {
