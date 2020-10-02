@@ -8,9 +8,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 //middleware
-app.use(express.static("public"));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static("public"));
 
 // HTML ROUTES
 
@@ -42,17 +43,15 @@ app.get("/api/notes", function (req, res) {
 
 app.post("/api/notes", function (req, res) {
   try {
-    var notesList = fs.readFileSync("./db/db.json", "utf8");
+    notesList = fs.readFileSync("./db/db.json", "utf8");
     notesList = JSON.parse(notesList);
-    for (var i = 0; i <= notesList.length; i++) {
-        req.body.id=notesList.length
-    }
+    req.body.id =notesList.length;
     notesList.push(req.body);
     notesList = JSON.stringify(notesList);
     fs.writeFile("./db/db.json", notesList, "utf8", function (err) {
       if (err) throw err;
     });
-    res.json(req.body);
+    res.json(JSON.parse(notesList));
   } catch (err) {
     throw err;
   }
